@@ -7,6 +7,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+
 import java.time.Duration;
 
 public class BasePage {
@@ -15,10 +16,12 @@ public class BasePage {
     private Actions actions;
 
 
+
     //1. Command element
     //getXpath
     public By getXpath(String xpath) {
         return By.xpath(xpath);
+
     }
 
     //getDynamicXpath
@@ -64,7 +67,7 @@ public class BasePage {
 
 
     public void waitForElementIsClickable(WebDriver driver, String xpath) {
-        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        wait = new WebDriverWait(driver, Duration.ofSeconds());
         wait.until(ExpectedConditions.elementToBeClickable(getElement(driver, xpath)));
     }
 

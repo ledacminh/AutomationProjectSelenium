@@ -1,23 +1,23 @@
 package testcases;
 
 
+import actions.BaseTest;
 import com.aventstack.extentreports.Status;
-import common.Log;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 import report.ExtentTestManager;
 
-public class LoginTestCases extends base.BaseTest {
+public class LoginTestCase extends BaseTest {
 
     @Test
     public void openDemoQA() {
+       WebDriver  driver = getBrowserDriver("CHROME", "https://demoqa.com");
         ExtentTestManager.getTest().log(Status.INFO, "Open DemoQA");
-        driver.get("https://demoqa.com");
 
         // Ví dụ cố tình verify đơn giản
-        boolean hasBanner = driver.findElements(By.cssSelector(".home-banner")).size() > 0;
-        ExtentTestManager.getTest().info("Home banner present? " + hasBanner);
-        assert hasBanner : "Home banner is missing!";
+        driver.findElement(By.xpath("//div[@dfdfdg='43444']")).click();
+
     }
 
 }

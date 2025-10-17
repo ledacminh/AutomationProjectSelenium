@@ -1,6 +1,6 @@
-// src/test/java/report/TestListener.java
 package report;
 
+import actions.BaseTest;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.MediaEntityBuilder;
@@ -41,6 +41,16 @@ public class TestListener implements ITestListener {
     @Override
     public void onTestSuccess(ITestResult result) {
         ExtentTestManager.getTest().log(Status.PASS, "Test passed");
+        ExtentTest test = ExtentTestManager.getTest();
+        test.log(Status.PASS, "Test Passed");
+
+        test.fail(result.getThrowable());
+        String base64 = ((TakesScreenshot) BaseTest.getDriver()).getScreenshotAs(OutputType.BASE64);
+        test.fail("Screenshot on failure",
+                com.aventstack.extentreports.MediaEntityBuilder
+                        .createScreenCaptureFromBase64String(base64, result.getMethod().getMethodName())
+                        .build()
+        );
         ExtentTestManager.remove();
     }
 
@@ -48,13 +58,12 @@ public class TestListener implements ITestListener {
     public void onTestFailure(ITestResult result) {
         ExtentTest test = ExtentTestManager.getTest();
         test.fail(result.getThrowable());
-
-        Object driverObj = result.getTestContext().getAttribute("driver");
-        if (driverObj instanceof WebDriver) {
-            String path = takeScreenshot((WebDriver) driverObj, result.getMethod().getMethodName());
+            String base64 = ((TakesScreenshot) BaseTest.getDriver()).getScreenshotAs(OutputType.BASE64);
             test.fail("Screenshot on failure",
-                    MediaEntityBuilder.createScreenCaptureFromPath(path).build());
-        }
+                    com.aventstack.extentreports.MediaEntityBuilder
+                            .createScreenCaptureFromBase64String(base64, result.getMethod().getMethodName())
+                            .build()
+            );
         ExtentTestManager.remove();
     }
 

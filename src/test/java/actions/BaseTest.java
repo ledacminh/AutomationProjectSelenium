@@ -1,26 +1,59 @@
-// src/test/java/base/BaseTest.java
-package base;
+package actions;
 
+import constants.GlobalConstants;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.testng.annotations.*;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.annotations.AfterMethod;
+
+import java.time.Duration;
 
 public class BaseTest {
-    protected WebDriver driver;
+    private static WebDriver driver;
+    ChromeOptions chromeOptions;
+    EdgeOptions edgeOptions;
 
-    @BeforeMethod(alwaysRun = true)
-    public void setUp(org.testng.ITestContext context) {
-        ChromeOptions options = new ChromeOptions();
-        if (Boolean.parseBoolean(System.getProperty("headless", "false"))) {
-            options.addArguments("--headless=new", "--window-size=1920,1080");
-        } else {
-            options.addArguments("--start-maximized");
+    public WebDriver getBrowserDriver(String browserName, String url) {
+        String browser = browserName.toUpperCase();
+        switch (browser) {
+            case "CHROME":
+                WebDriverManager.chromedriver().setup();
+                chromeOptions = new ChromeOptions();
+                chromeOptions.addArguments("--remote-allow-origins=*");
+                driver = new ChromeDriver(chromeOptions);
+                break;
+            case "EDGE":
+                WebDriverManager.edgedriver().setup();
+                edgeOptions = new EdgeOptions();
+                edgeOptions.addArguments("--remote-allow-origins=*");
+                driver = new EdgeDriver(edgeOptions);
+                break;
+            case "FIREFOX":
+                WebDriverManager.firefoxdriver().setup();
+                driver = new FirefoxDriver();
+                break;
+            case "HCHROME":
+                chromeOptions = new ChromeOptions();
+                chromeOptions.addArguments("--headless=new");
+                WebDriverManager.chromedriver().setup();
+                driver = new ChromeDriver(chromeOptions);
+                break;
+
+            default:
+                throw new RuntimeException("Please enter correct browser name");
         }
-        driver = new ChromeDriver(options);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(GlobalConstants.LONG_TIMEOUT));
+        driver.manage().window().maximize();
+        driver.get(url);
+        return driver;
+    }
 
-        // Để Listener lấy được driver khi cần chụp screenshot:
-        context.setAttribute("driver", driver);
+    public static WebDriver getDriver() {
+        return driver;
     }
 
     @AfterMethod(alwaysRun = true)

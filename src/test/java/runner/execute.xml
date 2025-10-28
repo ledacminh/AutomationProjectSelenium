@@ -2,11 +2,11 @@
 <suite name="Demo QA" parallel="false">
 
     <!-- NHÓM phải đứng đầu nếu có -->
-    <groups>
-        <run>
-            <include name="smoke"/>
-        </run>
-    </groups>
+<!--    <groups>-->
+<!--        <run>-->
+<!--            <include name="smoke"/>-->
+<!--        </run>-->
+<!--    </groups>-->
 
     <!-- Listener -->
     <listeners>

@@ -10,7 +10,7 @@ import report.ExtentTestManager;
 
 public class LoginTestCase extends BaseTest {
 
-    @Test
+    @Test(groups = {"gggggg"})
     public void openDemoQA() {
        WebDriver  driver = getBrowserDriver("CHROME", "https://demoqa.com");
         ExtentTestManager.getTest().log(Status.INFO, "Open DemoQA");
